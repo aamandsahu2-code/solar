@@ -1,0 +1,582 @@
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar PV Module Manufacturing & Testing</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --primary: #FFD700; /* Solar Gold */
+            --accent: #00BFFF; /* Sky Blue */
+            --dark: #0f172a; /* Deep Space Blue */
+            --glass: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --text: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        body {
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            color: var(--text);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Presentation Container */
+        .container {
+            width: 90%;
+            height: 90%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            padding: 20px 40px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 { font-size: 1.2rem; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; }
+        .slide-counter { font-size: 0.9rem; color: var(--accent); }
+
+        /* Slide Content Area */
+        .slide-wrapper {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            overflow-y: auto; /* Allow scrolling for dense content */
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(50px);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            z-index: 10;
+        }
+
+        .slide.prev { transform: translateX(-100px); opacity: 0; }
+
+        /* Typography & Layouts */
+        h2 { font-size: 2.2rem; margin-bottom: 20px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h3 { font-size: 1.4rem; color: var(--primary); margin-top: 15px; margin-bottom: 10px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+        .card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.15); }
+
+        ul { list-style: none; }
+        li { margin-bottom: 10px; padding-left: 20px; position: relative; }
+        li::before { content: "•"; color: var(--accent); position: absolute; left: 0; font-weight: bold; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--glass); border-radius: 10px; overflow: hidden; }
+        th, td { padding: 12px 20px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: rgba(0, 191, 255, 0.2); color: var(--primary); }
+        tr:hover { background: rgba(255,255,255,0.05); }
+
+        /* Formulas */
+        .formula-box {
+            background: rgba(0,0,0,0.3);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.2rem;
+        }
+
+        /* Timeline/Process Flow */
+        .process-flow { display: flex; flex-direction: column; gap: 10px; }
+        .step { display: flex; align-items: center; gap: 15px; }
+        .step-num { background: var(--accent); color: #000; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; }
+
+        /* Controls */
+        .controls {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+        }
+
+        button {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 10px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        button:hover { background: var(--accent); color: #000; }
+        button:disabled { border-color: gray; color: gray; cursor: not-allowed; }
+
+        .progress-bar { height: 4px; background: var(--border); width: 100%; position: absolute; bottom: 0; left: 0; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.5s; }
+
+        /* Animations */
+        .anim-item { opacity: 0; transform: translateY(20px); transition: all 0.5s ease; }
+        .slide.active .anim-item { opacity: 1; transform: translateY(0); }
+        
+        /* Stagger delays */
+        .slide.active .anim-item:nth-child(1) { transition-delay: 0.1s; }
+        .slide.active .anim-item:nth-child(2) { transition-delay: 0.2s; }
+        .slide.active .anim-item:nth-child(3) { transition-delay: 0.3s; }
+        .slide.active .anim-item:nth-child(4) { transition-delay: 0.4s; }
+        .slide.active .anim-item:nth-child(5) { transition-delay: 0.5s; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Solar PV Module SOP</h1>
+        <div class="slide-counter">Slide <span id="current-slide">1</span> / 15</div>
+    </header>
+
+    <div class="slide-wrapper">
+
+        <div class="slide active">
+            <h2>Components & Specs (Jan 03 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item">
+                    <h3>Frame Specifications</h3>
+                    <ul>
+                        <li><strong>Material:</strong> Aluminium Alloy 6005 + \(15\mu l\) analyzing coating.</li>
+                        <li><strong>Dimensions:</strong><br>
+                            \(2278mm \times 1134mm\)<br>
+                            <em style="color:var(--accent)">OR</em><br>
+                            \(2277mm \times 1134mm\)
+                        </li>
+                    </ul>
+                </div>
+                <div class="card anim-item">
+                    <h3>Junction Box (JB) & Connections</h3>
+                    <ul>
+                        <li><strong>JB:</strong> Contains Bypass Diode (Schottky Diode, \(30A\)).</li>
+                        <li><strong>Connector:</strong> MC4.</li>
+                        <li><strong>Sealant:</strong> Silicone.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Electrical Definitions - Part 1 (Jan 03 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item">
+                    <h3>\(P_{max}\)</h3>
+                    <p>Represents the highest wattage the panel can produce under specific test conditions.</p>
+                </div>
+                <div class="card anim-item">
+                    <h3>\(I_{sc}\) (Short Circuit Current)</h3>
+                    <p>The max current a solar panel can produce when its + & - are directly connected (creating a Short Circuit).</p>
+                </div>
+                <div class="card anim-item">
+                    <h3>\(V_{oc}\) (Voltage Open Circuit)</h3>
+                    <p>The max voltage a solar panel can produce when no electrical load is connected to it.</p>
+                </div>
+                <div class="card anim-item">
+                    <h3>Temp & Temp IR</h3>
+                    <ul>
+                        <li><strong>Temp IR:</strong> Infrared thermography used for temperature measurement and analysis of solar panels.</li>
+                        <li><strong>Temp:</strong> The operating temp of the solar panel & its impact on energy production.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Electrical Definitions - Part 2 (Jan 03 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item">
+                    <h3>Temperature Coefficients</h3>
+                    <ul>
+                        <li><strong>Temp K:</strong> The temperature coefficient of power.</li>
+                        <li><strong>Temp PT1000:</strong> A high precision temp sensor used to measure the temp of the solar panel's backsheet.</li>
+                    </ul>
+                </div>
+                <div class="card anim-item">
+                    <h3>MPP Parameters</h3>
+                    <ul>
+                        <li><strong>\(I_{mp}\):</strong> The amperage the panel produces when operating at its peak efficiency.</li>
+                        <li><strong>\(V_{mp}\):</strong> It is the specific voltage at which a solar panel produces its peak power output (Voltage at Max Power).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Manufacturing Process Flow - Step 1 (Jan 04 Data)</h2>
+            <div class="process-flow">
+                <div class="card anim-item">
+                    <h3>Initial Assembly</h3>
+                    <ol style="margin-left:20px">
+                        <li>Front Glass Loading</li>
+                        <li>EPE Loading</li>
+                        <li>Soldering</li>
+                        <li>Buffer (For storage)</li>
+                        <li>Cell Loading on Glass</li>
+                    </ol>
+                </div>
+                <div class="formula-box anim-item">
+                    <strong>Side Process:</strong> Cell Loading \(\rightarrow\) Laser (direction/water for cutting) \(\rightarrow\) Cell Cutting \(\rightarrow\) Position Changing (+,-) \(\rightarrow\) Ribbon Soldering.<br>
+                    <small style="color:var(--primary)">Note: 1 String = 12 Half cells. | Matrix = \(72 \times 2\) Half cells.</small>
+                </div>
+                <div class="card anim-item">
+                    <h3>Auto Bussing</h3>
+                    <p>[For attaching Bars - I, U & L-Bars]</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Manufacturing Process Flow - Step 2 (Jan 04 Data)</h2>
+            <h3>Layup & ID</h3>
+            <div class="process-flow">
+                <div class="step anim-item"><div class="step-num">7</div> <span><strong>Auto Taping:</strong> [Paste 44 tapes to not to remove cells]</span></div>
+                <div class="step anim-item"><div class="step-num">8</div> <span><strong>Barcode Area:</strong> [Module number, Company Name paste]</span></div>
+                <div class="step anim-item"><div class="step-num">9</div> <span><strong>Buffer:</strong> [For storage]</span></div>
+                <div class="step anim-item"><div class="step-num">10</div> <span><strong>Again EPE Loading</strong></span></div>
+                <div class="step anim-item"><div class="step-num">11</div> <span><strong>Back Glass Loading</strong></span></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Manufacturing Process Flow - Step 3 (Jan 05 Data)</h2>
+            <h3>Lamination & Trimming</h3>
+            <div class="grid-2">
+                <div class="process-flow">
+                    <div class="step anim-item"><div class="step-num">12</div> <span>Paste Barcode & scan</span></div>
+                    <div class="step anim-item"><div class="step-num">13</div> <span>Pre-EL testing</span></div>
+                    <div class="step anim-item"><div class="step-num">14</div> <span>Glass Edge soldering: [For edge sealing]</span></div>
+                </div>
+                <div class="card anim-item">
+                    <h3>15. Laminator Process</h3>
+                    <ul>
+                        <li><strong>Zone-1:</strong> Vacuum (\(125^\circ C\) to Remove Air)</li>
+                        <li><strong>Zone-2:</strong> Temperature (\(140^\circ C\) to melt EPE)</li>
+                        <li><strong>Zone-3:</strong> Cooling (\(30^\circ C\))</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="formula-box anim-item" style="margin-top:20px;">
+                <strong>16. Edge trimming M/C:</strong> [to trim extra EPE] \(\rightarrow\) Paste RFID (Radio Frequency Identification Device).
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>VQC & Framing (Jan 05 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item" style="border-color: var(--primary);">
+                    <h3>Visual Quality Checking (VQC)</h3>
+                    <ul>
+                        <li><strong>Inspection Viewing Distance:</strong> \(1.5 \text{ Meter}\)</li>
+                        <li><strong>Viewing Angle:</strong> \(45^\circ \text{ to } 90^\circ\)</li>
+                        <li><strong>Light:</strong> \(> 800 \text{ Lux}\)</li>
+                    </ul>
+                </div>
+                <div class="card anim-item">
+                    <h3>Framing Process</h3>
+                    <ol start="17" style="margin-left:20px">
+                        <li>Buffer: [For storage]</li>
+                        <li>Framing Station: [Sealant into frames]</li>
+                        <li>Frame fixing</li>
+                        <li>JB Fixing on terminals</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Finishing Process & Specs (Jan 06 Data)</h2>
+            <h3>JB Soldering & Curing</h3>
+            <div class="grid-3">
+                <div class="card anim-item">
+                    <h4>JB Soldering</h4>
+                    <p>[with terminals]</p>
+                    <hr style="border-color:var(--border); margin:10px 0">
+                    <ul>
+                        <li><strong>Time:</strong> \(3 \pm 1 \text{ sec}\)</li>
+                        <li><strong>Holding Time:</strong> \(7 \pm 3 \text{ sec}\)</li>
+                        <li><strong>Temp:</strong> \(320^\circ C - 380^\circ C\)</li>
+                    </ul>
+                </div>
+                <div class="card anim-item">
+                    <h4>JB Potting</h4>
+                    <p>[to pack JB from another side]</p>
+                    <hr style="border-color:var(--border); margin:10px 0">
+                    <ul>
+                        <li><strong>Ratio:</strong> \(06 : 01\) (Base : Catalyst)</li>
+                        <li><em>Note: Glue for Fast Curing.</em></li>
+                    </ul>
+                </div>
+                <div class="card anim-item">
+                    <h4>Curing</h4>
+                    <p>[For curing Sealant & JB potting]</p>
+                    <hr style="border-color:var(--border); margin:10px 0">
+                    <ul>
+                        <li><strong>Conditions:</strong> \(4 \text{ hrs at } 25^\circ C \text{ to } 30^\circ C\) & Humidity \(60\%\).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Final Steps (Jan 06 Data)</h2>
+            <ul class="anim-item">
+                <li><strong>Edge buffing:</strong> [Sharp edge trimming to avoid injuries from frames]</li>
+                <li><strong>JB Box closing</strong></li>
+                <li><strong>Contact Block fixing</strong></li>
+                <li><strong>Flipper:</strong> [For rotating \(180^\circ\)]</li>
+            </ul>
+            <div class="card anim-item" style="margin-top:20px; border: 2px solid var(--primary);">
+                <h3>Sun Simulator ☀️</h3>
+                <ul>
+                    <li>Flash \(1000 \pm 30 W/m^2\) to know how much power is producing the Module.</li>
+                    <li>At Air Mass \(1.5\).</li>
+                    <li>Grading as per highest wattage (e.g., I1, I2).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Testing Sequence (Jan 07 Data)</h2>
+            <div class="process-flow">
+                <div class="step anim-item">1. Flipper: [For rotating \(180^\circ\)]</div>
+                <div class="card anim-item">
+                    <strong>2. Hipot testing: [Safety testing]</strong>
+                    <ul>
+                        <li>Voltage testing - DCW test</li>
+                        <li>Insulation Resistance test - IR test</li>
+                        <li>Grounding Continuity test - GC test</li>
+                    </ul>
+                </div>
+                <div class="step anim-item">3. Post EL testing</div>
+                <div class="step anim-item">4. FQC: [Final Quality Checking]</div>
+                <div class="step anim-item">5. Corner fixing Area</div>
+                <div class="step anim-item">6. Packing the Materials</div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Hipot Test Details - DCW & IR (Jan 20 Data)</h2>
+            <div class="card anim-item">
+                <h3>1. DCW (Dielectrical Voltage Withstand) Test</h3>
+                <ul>
+                    <li><strong>Purpose:</strong> Used for checking current leakage of a solar module.</li>
+                    <li><strong>Formula:</strong> \(System \text{ voltage} \times 3 + 300 \text{ voltage}\)</li>
+                    <li><strong>Example:</strong> \(1500 \times 3 + 300 = 4800V\)</li>
+                    <li><strong style="color:#ff6b6b">Fail Condition:</strong> Busbar or Matrix shift or touch to frames.</li>
+                </ul>
+            </div>
+            <br>
+            <div class="card anim-item">
+                <h3>2. IR (Insulation Resistance) Test</h3>
+                <ul>
+                    <li><strong>Purpose:</strong> Used to check Insulation Resistance of a Module.</li>
+                    <li><strong>Voltage:</strong> System voltage = \(1500V\).</li>
+                    <li><strong style="color:#ff6b6b">Fail Condition:</strong> Busbar or Matrix shift or touch to the frames.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Hipot Test Details - GND & Specs (Jan 21 Data)</h2>
+            <div class="card anim-item">
+                <h3>3. GND (Ground Continuity) Test</h3>
+                <ul>
+                    <li><strong>Purpose:</strong> Resistance test / Check current leakage.</li>
+                    <li><strong>Formula:</strong> \(JB \text{ diode current} \times 2.5\)</li>
+                    <li><strong>Example:</strong> \(30A \times 2.5 = 75A\).</li>
+                    <li><strong style="color:#ff6b6b">Fail Condition:</strong> Frame gap / JB short.</li>
+                </ul>
+            </div>
+            
+            <h3 class="anim-item">Test Specifications Table</h3>
+            <table class="anim-item">
+                <thead>
+                    <tr><th>Test</th><th>Input</th><th>Spec</th><th>Remarks</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>DCW</td><td>\(4800V\)</td><td>\(< 50\mu A\)</td><td>The lesser the current leakage, the better.</td></tr>
+                    <tr><td>IR</td><td>\(1500V\)</td><td>\(> 16 M\Omega\)</td><td>The higher the resistance, the better.</td></tr>
+                    <tr><td>GND</td><td>\(75A\)</td><td>\(< 100 m\Omega\)</td><td>Resistance. The lesser the leakage, the better.</td></tr>
+                    <tr><td>Wet Leakage</td><td>\(1500V\)</td><td>\(> 16 M\Omega\)</td><td>For 120 sec. As per IR.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h2>Technical Standards (Jan 18 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item">
+                    <h3>STC (Standard Test Conditions)</h3>
+                    <p><em>Reference conditions under which performance & rating are measured.</em></p>
+                    <ul>
+                        <li><strong>Irradiance:</strong> \(1000 W/m^2\) (Sunlight Intensity)</li>
+                        <li><strong>Cell temp:</strong> \(25^\circ C\)</li>
+                        <li><strong>Air mass:</strong> \(1.5\) spectrum</li>
+                    </ul>
+                </div>
+                <div class="card anim-item" style="background: rgba(255, 215, 0, 0.1);">
+                    <h3>BSTC (Bifacial Standard Test Conditions)</h3>
+                    <p><em>Reference conditions for bifacial solar modules.</em></p>
+                    <ul>
+                        <li><strong>Front side Irradiance:</strong> \(1000 W/m^2\)</li>
+                        <li><strong>Back side Irradiance:</strong> \(135 W/m^2\)</li>
+                        <li><strong>Cell temp:</strong> \(25^\circ C\)</li>
+                        <li><strong>Air Mass:</strong> \(1.5\) spectrum</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Key Formulas (Jan 19 & 22 Data)</h2>
+            <div class="card anim-item">
+                <h3>1. Fill Factor (FF)</h3>
+                <p>Ratio of max power output to the product of its \(V_{oc}\) & \(I_{sc}\).</p>
+                <div class="formula-box">
+                    $$FF\% = \frac{P_{max}}{V_{oc} \times I_{sc}} \times 100$$
+                    $$FF = \frac{I_{mp} \times V_{mp}}{V_{oc} \times I_{sc}}$$
+                </div>
+                <p><strong>Condition:</strong> \((>75\%)\)</p>
+            </div>
+            <div class="card anim-item">
+                <h3>2. Efficiency %</h3>
+                <div class="formula-box">
+                    $$\text{Efficiency}\% = \frac{P_{max}}{\text{Area} \times \text{Irradiance}} \times 100$$
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>Additional Formulas (Jan 22 Data)</h2>
+            <div class="grid-2">
+                <div class="card anim-item">
+                    <h3>3. \(I_{mp}\)</h3>
+                    <div class="formula-box">$$I_{mp} = P_{max} / V_{mp}$$</div>
+                    <p>(Max power / voltage at max power)</p>
+                </div>
+                <div class="card anim-item">
+                    <h3>4. \(P_{max}\)</h3>
+                    <div class="formula-box">$$P_{max} = I_{mp} \times V_{mp}$$</div>
+                </div>
+            </div>
+            <div class="card anim-item" style="margin-top:20px">
+                <h3>5. Area of a Module</h3>
+                <p><strong>Formula:</strong> \(L \times W\)</p>
+                <ul>
+                    <li>Example 1: \(2.278 \times 1.134 = 2.58 m^2\)</li>
+                    <li>Example 2: \(2.382 \times 1.134 = 2.70 m^2\)</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">&#8592; Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next &#8594;</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progressFill = document.getElementById('progress');
+    const slideCounter = document.getElementById('current-slide');
+
+    function updateSlide() {
+        slides.forEach((slide, index) => {
+            slide.classList.remove('active', 'prev');
+            if (index === currentSlide) {
+                slide.classList.add('active');
+            } else if (index < currentSlide) {
+                slide.classList.add('prev');
+            }
+        });
+
+        // Update Counter
+        slideCounter.textContent = currentSlide + 1;
+
+        // Update Progress Bar
+        const progress = ((currentSlide + 1) / totalSlides) * 100;
+        progressFill.style.width = `${progress}%`;
+
+        // Button States
+        document.getElementById('prevBtn').disabled = currentSlide === 0;
+        document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        document.getElementById('nextBtn').textContent = currentSlide === totalSlides - 1 ? 'Finish' : 'Next \u2192';
+    }
+
+    function changeSlide(direction) {
+        if (direction === 1 && currentSlide < totalSlides - 1) {
+            currentSlide++;
+        } else if (direction === -1 && currentSlide > 0) {
+            currentSlide--;
+        }
+        updateSlide();
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') {
+            changeSlide(1);
+        } else if (e.key === 'ArrowLeft') {
+            changeSlide(-1);
+        }
+    });
+
+    // Initialize
+    updateSlide();
+</script>
+
+</body>
+</html>
