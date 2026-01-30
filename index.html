@@ -2,912 +2,836 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Solar PV Module Manufacturing Presentation</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar PV Module Manufacturing - Mobile Presentation</title>
     <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            --glass-bg: rgba(30, 41, 59, 0.85); /* Slightly darker for better mobile contrast */
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --primary: #00d4ff;
-            --accent: #ffd700;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --success: #22c55e;
-            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
         }
 
         body {
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            overflow: hidden;
+            color: #fff;
+            touch-action: pan-y;
+        }
+
+        .container {
             width: 100vw;
-            overflow: hidden;
+            height: 100vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-        }
-
-        /* Animated Background Particles */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
-            animation: pulse 10s infinite alternate;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.5); opacity: 0.8; }
-        }
-
-        /* Main Card Container */
-        .presentation-container {
-            width: 95%;
-            max-width: 1200px;
-            height: 90vh; /* Increased height for mobile */
-            position: relative;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 0%;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--primary);
-        }
-
-        /* Slides Area */
-        .slides-wrapper {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            padding: 10px; /* Reduced padding for mobile */
+            justify-content: center;
+            perspective: 1000px;
+            padding: 10px;
         }
 
         .slide {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            padding: 30px 40px;
+            max-width: 100%;
+            height: calc(100vh - 100px);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: none;
             opacity: 0;
-            visibility: hidden;
-            transform: translateX(30px);
-            transition: all 0.3s ease-out; /* Faster slide transition */
-            overflow-y: auto; /* Scrollable content */
-            display: flex;
-            flex-direction: column;
+            transform: translateX(100%);
+            transition: all 0.5s ease-out;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .slide.active {
+            display: block;
             opacity: 1;
-            visibility: visible;
             transform: translateX(0);
-            z-index: 10;
+            animation: slideIn 0.5s ease-out;
         }
 
-        /* Scrollbar Styling */
-        .slide::-webkit-scrollbar {
-            width: 5px;
-        }
-        .slide::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2);
-            border-radius: 4px;
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
-        /* Typography */
         h1 {
-            font-size: clamp(1.8rem, 5vw, 3.5rem); /* Responsive font size */
-            background: linear-gradient(to right, var(--primary), var(--accent));
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
+            background-clip: text;
             text-align: center;
+            line-height: 1.3;
         }
 
         h2 {
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            color: var(--primary);
-            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            position: relative;
+            font-size: 1.4em;
+            margin: 15px 0 10px 0;
+            color: #00d4ff;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 8px;
+            animation: fadeInLeft 0.5s ease-out;
         }
-        
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
         h3 {
-            font-size: clamp(1.1rem, 3.5vw, 1.5rem);
-            color: #fff;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.2em;
+            margin: 12px 0 8px 0;
+            color: #66d9ff;
+            animation: fadeInUp 0.6s ease-out;
         }
-        
-        h3::before {
-            content: '•';
-            color: var(--accent);
-            font-size: 1.5em;
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 12px 0;
+            border-left: 4px solid #00d4ff;
+            animation: fadeIn 0.7s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .content-box:active {
+            background: rgba(255, 255, 255, 0.12);
+            transform: scale(0.98);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        p, li {
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 8px 0;
+            animation: fadeIn 0.8s ease-out;
         }
 
         ul, ol {
-            padding-left: 15px;
+            margin-left: 20px;
         }
 
         li {
-            font-size: clamp(0.95rem, 3vw, 1.1rem);
-            margin-bottom: 10px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            list-style: none;
+            margin: 6px 0;
             position: relative;
-            padding-left: 20px;
-            opacity: 0; /* For animation */
-            transform: translateY(10px);
-            transition: all 0.3s ease; /* Faster item transition */
-        }
-
-        /* Staggered Animation Classes */
-        .slide.active li {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         li::before {
-            content: "\f054"; /* FontAwesome chevron */
-            font-family: "Font Awesome 6 Free";
-            font-weight: 900;
+            content: '▸';
             position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-size: 0.7em;
-            top: 6px;
+            left: -18px;
+            color: #00d4ff;
+            font-weight: bold;
         }
 
-        strong {
-            color: white;
-            font-weight: 600;
-        }
-
-        .note {
-            font-style: italic;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            display: block;
-            margin-top: 5px;
-            border-left: 3px solid var(--text-muted);
-            padding-left: 10px;
-        }
-
-        /* Formulas */
-        .formula-box {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-            margin: 15px 0;
+        .formula {
+            background: rgba(0, 153, 255, 0.2);
+            padding: 12px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 12px 0;
+            border: 2px solid rgba(0, 153, 255, 0.5);
             text-align: center;
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            overflow-x: auto;
+            animation: pulse 2s infinite;
+            word-wrap: break-word;
         }
 
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            margin-top: 15px;
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(0, 153, 255, 0.4); }
+            50% { box-shadow: 0 0 15px rgba(0, 153, 255, 0.7); }
         }
-        
+
+        .highlight {
+            color: #00d4ff;
+            font-weight: bold;
+        }
+
+        .spec-value {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background: rgba(0,0,0,0.2);
-            min-width: 500px; /* Ensure table doesn't squish too much */
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.9rem;
+            margin: 15px 0;
+            animation: fadeIn 0.8s ease-out;
+            font-size: 0.85em;
         }
 
         th {
-            background: rgba(0, 212, 255, 0.15);
-            color: var(--primary);
+            background: rgba(0, 212, 255, 0.3);
+            padding: 10px 8px;
+            text-align: left;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            font-size: 0.9em;
         }
 
-        /* Footer inside slide */
-        .slide-footer {
-            margin-top: auto;
-            text-align: right;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: space-between;
-            flex-shrink: 0; /* Prevent footer from shrinking */
+        td {
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Controls Bar */
-        .controls-area {
-            height: 65px;
-            background: rgba(15, 23, 42, 0.98);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 100;
+        tr:active {
+            background: rgba(0, 212, 255, 0.1);
         }
 
-        .control-group {
+        .controls {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            align-items: center;
             gap: 15px;
+            z-index: 1000;
+            width: 95%;
+            max-width: 400px;
         }
 
-        .btn {
-            background: rgba(255,255,255,0.1);
+        button {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 1em;
             border: none;
-            color: white;
-            width: 45px; /* Larger touch target */
-            height: 45px;
-            border-radius: 50%;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            color: #fff;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 153, 255, 0.4);
+            touch-action: manipulation;
         }
 
-        .btn:active {
+        button:active {
             transform: scale(0.95);
-            background: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 153, 255, 0.6);
         }
 
-        .btn-large {
-            width: auto;
-            padding: 0 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            gap: 10px;
-            height: 45px;
+        .slide-counter {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            font-size: 1em;
+            background: rgba(0, 212, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #00d4ff;
+            animation: fadeIn 0.8s ease-out;
+            z-index: 1000;
         }
 
-        .page-indicator {
-            font-family: monospace;
-            color: var(--primary);
-            font-size: 1rem;
-            white-space: nowrap;
-        }
-
-        /* Overview Grid Overlay */
-        .overview-overlay {
-            position: absolute;
+        .progress-bar {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.98);
-            z-index: 200;
-            display: none;
-            flex-wrap: wrap;
-            gap: 15px;
-            padding: 30px;
-            overflow-y: auto;
-            justify-content: center;
-            align-content: flex-start;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #0099ff);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
+            z-index: 1001;
         }
 
-        .overview-overlay.active {
-            display: flex;
+        .arrow-icon {
+            display: inline-block;
+            margin: 0 3px;
         }
 
-        .grid-item {
-            width: 140px;
-            height: 100px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
-            padding: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .step-number {
+            display: inline-block;
+            background: #00d4ff;
+            color: #000;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
             text-align: center;
-            font-size: 0.8rem;
-        }
-        
-        .grid-item.current {
-            border-color: var(--accent);
-            background: rgba(255, 215, 0, 0.1);
+            line-height: 26px;
+            font-weight: bold;
+            margin-right: 8px;
+            font-size: 0.9em;
         }
 
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            .presentation-container {
-                width: 100%;
-                height: 100vh;
-                border-radius: 0;
-                border: none;
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #00d4ff, #0099ff);
+            border-radius: 10px;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .container {
+                padding: 5px;
             }
+            
             .slide {
-                padding: 20px 20px 80px 20px; /* Bottom padding for controls */
+                height: calc(100vh - 80px);
+                padding: 15px;
+                border-radius: 12px;
             }
-            .btn-text {
-                display: none; /* Icon only on mobile */
+
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 12px;
             }
-            .controls-area {
-                padding: 0 10px;
+
+            h2 {
+                font-size: 1.2em;
+                margin: 12px 0 8px 0;
             }
-            .formula-box {
+
+            h3 {
+                font-size: 1.05em;
+                margin: 10px 0 6px 0;
+            }
+
+            p, li {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+
+            .content-box {
+                padding: 12px;
+                margin: 10px 0;
+            }
+
+            .formula {
+                font-size: 0.85em;
                 padding: 10px;
-                font-size: 1rem;
             }
-            h1 { font-size: 2rem; }
+
+            table {
+                font-size: 0.8em;
+            }
+
+            th, td {
+                padding: 6px 4px;
+            }
+
+            button {
+                padding: 12px 15px;
+                font-size: 0.95em;
+            }
+
+            .slide-counter {
+                font-size: 0.9em;
+                padding: 6px 12px;
+                top: 10px;
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3em;
+            }
+
+            h2 {
+                font-size: 1.1em;
+            }
+
+            h3 {
+                font-size: 1em;
+            }
+
+            p, li {
+                font-size: 0.85em;
+            }
+
+            .formula {
+                font-size: 0.8em;
+            }
+
+            table {
+                font-size: 0.75em;
+            }
+        }
+
+        /* Touch gestures */
+        .slide {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
 <body>
-
-    <div class="bg-animation"></div>
-
-    <div class="presentation-container" id="presentation">
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="slides-wrapper" id="slideContainer">
-            <div class="slide active" id="slide-1">
-                <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-                    <i class="fas fa-solar-panel fa-3x" style="color:var(--accent); margin-bottom:20px; animation: float 3s infinite ease-in-out;"></i>
-                    <h1>Solar PV Module Manufacturing,<br>Testing & Standards</h1>
-                    <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 10px;">Complete Detailed Presentation</p>
-                    <div style="margin-top: 30px; padding: 20px; background: rgba(0, 212, 255, 0.05); border: 1px solid var(--primary); border-radius: 15px; width: 100%;">
-                        <p><i class="fas fa-info-circle" style="color:var(--primary)"></i> <strong>Note:</strong> Contains all Specs, Formulas, and Processes.</p>
-                    </div>
-                </div>
-                <div class="slide-footer">
-                    <span>Intro</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-2">
-                <h2><i class="fas fa-ruler-combined"></i> Components & Specs</h2>
-                <h3>Frame Specifications</h3>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="slide-counter" id="slideCounter">1 / 15</div>
+    
+    <div class="container" id="slideContainer">
+        <!-- Slide 1 -->
+        <div class="slide active" id="slide1">
+            <h1>☀️ Solar PV Module Manufacturing</h1>
+            <h2>Slide 1: Components & Specifications</h2>
+            
+            <div class="content-box">
+                <h3>🔧 Frame Specifications</h3>
+                <p><span class="highlight">Material:</span> Aluminium Alloy 6005 + <span class="spec-value">15μm</span> anodizing coating</p>
+                <p><span class="highlight">Dimensions:</span></p>
                 <ul>
-                    <li><strong>Material:</strong> Aluminium Alloy 6005 + \(15\mu l\) analyzing coating.</li>
-                    <li><strong>Dimensions:</strong><br>
-                        \(2278mm \times 1134mm\)<br>
-                        OR \(2277mm \times 1134mm\)
-                    </li>
+                    <li><span class="spec-value">2278mm × 1134mm</span> OR</li>
+                    <li><span class="spec-value">2277mm × 1134mm</span></li>
                 </ul>
-                <h3>Junction Box (JB) & Connections</h3>
-                <ul>
-                    <li><strong>JB:</strong> Contains Bypass Diode (Schottky Diode, \(30A\)).</li>
-                    <li><strong>Connector:</strong> MC4.</li>
-                    <li><strong>Sealant:</strong> Silicone.</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 1</span>
-                    <span>@kd</span>
-                </div>
             </div>
 
-            <div class="slide" id="slide-3">
-                <h2><i class="fas fa-bolt"></i> Electrical Definitions - Part 1</h2>
-                <ul>
-                    <li><strong>\(P_{max}\):</strong> Represents the highest wattage the panel can produce under specific test conditions.</li>
-                    <li><strong>\(I_{sc}\) (Short Circuit Current):</strong> The max current a solar panel can produce when its + & - are directly connected (creating a Short Circuit).</li>
-                    <li><strong>\(V_{oc}\) (Voltage Open Circuit):</strong> The max voltage a solar panel can produce when no electrical load is connected to it.</li>
-                    <li><strong>Temp IR:</strong> Infrared thermography used for temperature measurement and analysis of solar panels.</li>
-                    <li><strong>Temp:</strong> The operating temp of the solar panel & its impact on energy production.</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 2</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-4">
-                <h2><i class="fas fa-bolt"></i> Electrical Definitions - Part 2</h2>
-                <ul>
-                    <li><strong>Temp K:</strong> The temperature coefficient of power.</li>
-                    <li><strong>Temp PT1000:</strong> A high precision temp sensor used to measure the temp of the solar panel's backsheet.</li>
-                    <li><strong>\(I_{mp}\):</strong> The amperage the panel produces when operating at its peak efficiency.</li>
-                    <li><strong>\(V_{mp}\):</strong> It is the specific voltage at which a solar panel produces its peak power output (Voltage at Max Power).</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 3</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-5">
-                <h2><i class="fas fa-cogs"></i> Manufacturing Process Flow - Step 1</h2>
-                <h3>Initial Assembly</h3>
-                <ol>
-                    <li>Front Glass Loading</li>
-                    <li>EPE Loading</li>
-                    <li>Soldering</li>
-                    <li>Buffer (For storage)</li>
-                    <li>Cell Loading on Glass</li>
-                </ol>
-                <h3>Side Process</h3>
-                <p style="color:#cbd5e1; margin-left: 20px; font-size: 0.9rem;">Cell Loading <i class="fas fa-arrow-right" style="font-size:0.7em; color:var(--primary)"></i> Laser <i class="fas fa-arrow-right" style="font-size:0.7em; color:var(--primary)"></i> Cell Cutting <i class="fas fa-arrow-right" style="font-size:0.7em; color:var(--primary)"></i> Position Changing <i class="fas fa-arrow-right" style="font-size:0.7em; color:var(--primary)"></i> Ribbon Soldering.</p>
-                
-                <div style="display:flex; flex-direction:column; gap:5px; margin: 15px 0 0 20px;">
-                    <span class="note">Note: 1 String = 12 Half cells.</span>
-                    <span class="note">Note: Matrix = \(72 \times 2\) Half cells.</span>
-                </div>
-
-                <h3>Auto Bussing</h3>
-                <p style="margin-left: 20px; color:#cbd5e1;">6. Auto Bussing: [For attaching Bars - I, U & L-Bars]</p>
-                <div class="slide-footer">
-                    <span>Page 4</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-6">
-                <h2><i class="fas fa-cogs"></i> Manufacturing Process Flow - Step 2</h2>
-                <h3>Layup & ID</h3>
-                <ul>
-                    <li><strong>7. Auto Taping:</strong> [Paste 44 tapes to not to remove cells]</li>
-                    <li><strong>8. Barcode Area:</strong> [Module number, Company Name paste]</li>
-                    <li><strong>9. Buffer:</strong> [For storage]</li>
-                    <li><strong>10. Again EPE Loading</strong></li>
-                    <li><strong>11. Back Glass Loading</strong></li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 5</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-7">
-                <h2><i class="fas fa-layer-group"></i> Manufacturing Process Flow - Step 3</h2>
-                <h3>Lamination & Trimming</h3>
-                <ul>
-                    <li><strong>12. Paste Barcode & scan</strong></li>
-                    <li><strong>13. Pre-EL testing</strong></li>
-                    <li><strong>14. Glass Edge soldering:</strong> [For edge sealing]</li>
-                    <li><strong>15. Laminator Process:</strong>
-                        <div style="margin-left:10px; margin-top:10px; padding:10px; background:rgba(255,255,255,0.05); border-radius:8px; font-size:0.9rem;">
-                            <div style="margin-bottom:5px;"><i class="fas fa-wind"></i> Zone-1: Vacuum (\(125^\circ C\) to Remove Air)</div>
-                            <div style="margin-bottom:5px;"><i class="fas fa-temperature-high"></i> Zone-2: Temperature (\(140^\circ C\) to melt EPE)</div>
-                            <div><i class="fas fa-snowflake"></i> Zone-3: Cooling (\(30^\circ C\))</div>
-                        </div>
-                    </li>
-                    <li><strong>16. Edge trimming M/C:</strong> [to trim extra EPE]
-                        <br><span style="margin-left: 20px; color:var(--success)">→ Paste RFID.</span>
-                    </li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 6</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-8">
-                <h2><i class="fas fa-eye"></i> VQC & Framing</h2>
-                <h3>Visual Quality Checking (VQC)</h3>
-                <ul>
-                    <li>Inspection Viewing Distance: \(1.5 \text{ Meter}\)</li>
-                    <li>Viewing Angle: \(45^\circ \text{ to } 90^\circ\)</li>
-                    <li>Light: \(> 800 \text{ Lux}\)</li>
-                </ul>
-                <h3>Framing</h3>
-                <ul>
-                    <li><strong>17. Buffer:</strong> [For storage]</li>
-                    <li><strong>18. Framing Station:</strong> [Sealant into frames]</li>
-                    <li><strong>19. Frame fixing</strong></li>
-                    <li><strong>20. JB Fixing on terminals</strong></li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 7</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-9">
-                <h2><i class="fas fa-tools"></i> Finishing Process & Specs</h2>
-                <h3>JB Soldering & Curing</h3>
-                <ul>
-                    <li><strong>JB Soldering:</strong> [with terminals]
-                        <ul style="border-left: 2px solid var(--accent); margin-left:10px; padding-left:15px; margin-top:5px;">
-                            <li>Time: \(3 \pm 1 \text{ sec}\)</li>
-                            <li>Holding Time: \(7 \pm 3 \text{ sec}\)</li>
-                            <li>Temperature: \(320^\circ C - 380^\circ C\)</li>
-                        </ul>
-                    </li>
-                    <li><strong>JB Potting:</strong> [to pack JB]
-                        <ul style="margin-top:5px;">
-                            <li>Ratio: \(06 : 01\) (Base : Catalyst)</li>
-                            <li><span class="note">Note: Glue for Fast Curing.</span></li>
-                        </ul>
-                    </li>
-                    <li><strong>Curing:</strong> [For curing Sealant]
-                        <ul style="margin-top:5px;">
-                            <li>Conditions: \(4 \text{ hrs at } 25^\circ C \text{ to } 30^\circ C\).</li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 8</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-10">
-                <h2><i class="fas fa-flag-checkered"></i> Final Steps</h2>
-                <ul>
-                    <li><strong>Edge buffing:</strong> [Sharp edge trimming]</li>
-                    <li><strong>JB Box closing</strong></li>
-                    <li><strong>Contact Block fixing</strong></li>
-                    <li><strong>Flipper:</strong> [For rotating \(180^\circ\)]</li>
-                    <li><strong>Sun Simulator:</strong>
-                        <div style="background:rgba(255,215,0,0.1); padding:10px; border-radius:8px; margin-top:5px; font-size:0.9rem;">
-                            <div><i class="fas fa-sun" style="color:yellow"></i> Flash \(1000 \pm 30 W/m^2\) to know how much power is producing the Module.</div>
-                            <div style="margin-top:5px;">At Air Mass \(1.5\).</div>
-                            <div style="margin-top:5px;">Grading as per highest wattage (e.g., I1, I2).</div>
-                        </div>
-                    </li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 9</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-11">
-                <h2><i class="fas fa-clipboard-list"></i> Testing Sequence</h2>
-                <ol>
-                    <li>Flipper: [For rotating \(180^\circ\)]</li>
-                    <li>Hipot testing: [Safety testing]
-                        <ul style="margin-top:5px;">
-                            <li>Voltage testing - DCW test</li>
-                            <li>Insulation Resistance test - IR test</li>
-                            <li>Grounding Continuity test - GC test</li>
-                        </ul>
-                    </li>
-                    <li>Post EL testing</li>
-                    <li>FQC: [Final Quality Checking]</li>
-                    <li>Corner fixing Area</li>
-                    <li>Packing the Materials</li>
-                </ol>
-                <div class="slide-footer">
-                    <span>Page 10</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-12">
-                <h2><i class="fas fa-shield-alt"></i> Hipot Test Details - DCW & IR</h2>
-                <h3>1. DCW (Dielectrical Voltage Withstand)</h3>
-                <ul>
-                    <li><strong>Purpose:</strong> Used for checking current leakage.</li>
-                    <li><strong>Formula:</strong> \(System \text{ voltage} \times 3 + 300V\)</li>
-                    <li><strong>Example:</strong> \(1500 \times 3 + 300 = 4800V\).</li>
-                    <li><strong>Fail Condition:</strong> Busbar/Matrix shift or touch frames.</li>
-                </ul>
-                <h3>2. IR (Insulation Resistance) Test</h3>
-                <ul>
-                    <li><strong>Purpose:</strong> Check Insulation Resistance.</li>
-                    <li><strong>Voltage:</strong> System voltage = \(1500V\).</li>
-                    <li><strong>Fail Condition:</strong> Busbar/Matrix shift or touch frames.</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 11</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-13">
-                <h2><i class="fas fa-plug"></i> Hipot Test Details - GND & Specs</h2>
-                <h3>3. GND (Ground Continuity) Test</h3>
-                <ul>
-                    <li><strong>Purpose:</strong> Resistance test / Check leakage.</li>
-                    <li><strong>Formula:</strong> \(JB \text{ diode current} \times 2.5\)</li>
-                    <li><strong>Example:</strong> \(30A \times 2.5 = 75A\).</li>
-                    <li><strong>Fail Condition:</strong> Frame gap / JB short.</li>
-                </ul>
-                
-                <h3>Test Specifications</h3>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Test</th>
-                                <th>Input</th>
-                                <th>Spec</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>DCW</td>
-                                <td>\(4800V\)</td>
-                                <td>\(< 50\mu A\)</td>
-                            </tr>
-                            <tr>
-                                <td>IR</td>
-                                <td>\(1500V\)</td>
-                                <td>\(> 16 M\Omega\)</td>
-                            </tr>
-                            <tr>
-                                <td>GND</td>
-                                <td>\(75A\)</td>
-                                <td>\(< 100 m\Omega\)</td>
-                            </tr>
-                            <tr>
-                                <td>Wet</td>
-                                <td>\(1500V\)</td>
-                                <td>\(> 16 M\Omega\)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="slide-footer">
-                    <span>Page 12</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-14">
-                <h2><i class="fas fa-book"></i> Technical Standards</h2>
-                <h3>STC (Standard Test Conditions)</h3>
-                <ul>
-                    <li><strong>Definition:</strong> Reference conditions.</li>
-                    <li><strong>Irradiance:</strong> \(1000 W/m^2\)</li>
-                    <li><strong>Cell temp:</strong> \(25^\circ C\)</li>
-                    <li><strong>Air mass:</strong> \(1.5\) spectrum</li>
-                </ul>
-                <h3>BSTC (Bifacial Standard)</h3>
-                <ul>
-                    <li><strong>Definition:</strong> Reference for bifacial.</li>
-                    <li><strong>Front Irradiance:</strong> \(1000 W/m^2\)</li>
-                    <li><strong>Back Irradiance:</strong> \(135 W/m^2\)</li>
-                    <li><strong>Cell temp:</strong> \(25^\circ C\)</li>
-                    <li><strong>Air Mass:</strong> \(1.5\) spectrum</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 13</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-15">
-                <h2><i class="fas fa-calculator"></i> Key Formulas</h2>
-                <h3>1. Fill Factor (FF)</h3>
-                <p>Ratio of max power output to \(V_{oc} \times I_{sc}\).</p>
-                <div class="formula-box">
-                    \[ FF\% = \frac{P_{max}}{V_{oc} \times I_{sc}} \times 100 \]
-                    \[ FF = \frac{I_{mp} \times V_{mp}}{V_{oc} \times I_{sc}} \]
-                </div>
-                <p><strong>Condition:</strong> \((>75\%)\)</p>
-
-                <h3>2. Efficiency %</h3>
-                <div class="formula-box">
-                    \[ \text{Efficiency}\% = \frac{P_{max}}{\text{Area} \times \text{Irradiance}} \times 100 \]
-                </div>
-                <div class="slide-footer">
-                    <span>Page 14</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-            <div class="slide" id="slide-16">
-                <h2><i class="fas fa-calculator"></i> Additional Formulas</h2>
-                <h3>3. \(I_{mp}\)</h3>
-                <div class="formula-box">
-                    \[ I_{mp} = P_{max} / V_{mp} \]
-                </div>
-
-                <h3>4. \(P_{max}\)</h3>
-                <div class="formula-box">
-                    \[ P_{max} = I_{mp} \times V_{mp} \]
-                </div>
-
-                <h3>5. Area of a Module</h3>
-                <div class="formula-box">
-                    Formula: \(L \times W\)
-                </div>
-                <ul>
-                    <li>Ex 1: \(2.278 \times 1.134 = 2.58 m^2\)</li>
-                    <li>Ex 2: \(2.382 \times 1.134 = 2.70 m^2\)</li>
-                </ul>
-                <div class="slide-footer">
-                    <span>Page 15</span>
-                    <span>@kd</span>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="controls-area">
-            <div class="control-group">
-                <button class="btn" onclick="toggleOverview()" title="Slide Grid">
-                    <i class="fas fa-th"></i>
-                </button>
-                <button class="btn" onclick="toggleFullscreen()" title="Fullscreen">
-                    <i class="fas fa-expand"></i>
-                </button>
-            </div>
-
-            <div class="control-group">
-                <button class="btn btn-large" onclick="prevPage()" id="prevBtn" disabled>
-                    <i class="fas fa-chevron-left"></i> <span class="btn-text">Prev</span>
-                </button>
-                
-                <span class="page-indicator" id="indicator">1 / 16</span>
-                
-                <button class="btn btn-large" onclick="nextPage()" id="nextBtn">
-                    <span class="btn-text">Next</span> <i class="fas fa-chevron-right"></i>
-                </button>
+            <div class="content-box">
+                <h3>⚡ Junction Box (JB) & Connections</h3>
+                <p><span class="highlight">JB Contains:</span> Bypass Diode (Schottky Diode, <span class="spec-value">30A</span>)</p>
+                <p><span class="highlight">Connector:</span> MC4</p>
+                <p><span class="highlight">Sealant:</span> Silicone</p>
             </div>
         </div>
 
-        <div class="overview-overlay" id="overviewOverlay" onclick="if(event.target === this) toggleOverview()">
+        <!-- Slide 2 -->
+        <div class="slide" id="slide2">
+            <h1>⚡ Electrical Definitions</h1>
+            <h2>Slide 2: Part 1</h2>
+            
+            <div class="content-box">
+                <h3>📊 Key Electrical Parameters</h3>
+                <p><span class="highlight">P<sub>max</sub>:</span> Highest wattage the panel produces under specific test conditions</p>
+                <p><span class="highlight">I<sub>sc</sub> (Short Circuit Current):</span> Max current when + & - are directly connected</p>
+                <p><span class="highlight">V<sub>oc</sub> (Voltage Open Circuit):</span> Max voltage when no load is connected</p>
             </div>
 
+            <div class="content-box">
+                <h3>🌡️ Temperature Analysis</h3>
+                <p><span class="highlight">Temp IR:</span> Infrared thermography for temperature analysis</p>
+                <p><span class="highlight">Temp:</span> Operating temperature impact on energy production</p>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide" id="slide3">
+            <h1>⚡ Electrical Definitions</h1>
+            <h2>Slide 3: Part 2</h2>
+            
+            <div class="content-box">
+                <h3>📈 Advanced Parameters</h3>
+                <p><span class="highlight">Temp K:</span> Temperature coefficient of power</p>
+                <p><span class="highlight">Temp PT1000:</span> High precision sensor for backsheet temperature</p>
+                <p><span class="highlight">I<sub>mp</sub>:</span> Peak efficiency amperage</p>
+                <p><span class="highlight">V<sub>mp</sub>:</span> Voltage at maximum power output</p>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide" id="slide4">
+            <h1>🏭 Manufacturing Process</h1>
+            <h2>Slide 4: Step 1 - Initial Assembly</h2>
+            
+            <div class="content-box">
+                <h3>🔄 Main Process Flow</h3>
+                <p><span class="step-number">1</span> Front Glass Loading <span class="arrow-icon">→</span></p>
+                <p><span class="step-number">2</span> EPE Loading <span class="arrow-icon">→</span></p>
+                <p><span class="step-number">3</span> Soldering <span class="arrow-icon">→</span></p>
+                <p><span class="step-number">4</span> Buffer <span class="arrow-icon">→</span></p>
+                <p><span class="step-number">5</span> Cell Loading on Glass</p>
+            </div>
+
+            <div class="content-box">
+                <h3>✂️ Side Process: Cell Cutting</h3>
+                <p>Cell Loading <span class="arrow-icon">→</span> Laser (direction/water) <span class="arrow-icon">→</span> Cell Cutting <span class="arrow-icon">→</span> Position Changing (+,-) <span class="arrow-icon">→</span> Ribbon Soldering</p>
+            </div>
+
+            <div class="content-box">
+                <h3>⚙️ Configurations</h3>
+                <p><span class="highlight">1 String =</span> <span class="spec-value">12 Half cells</span></p>
+                <p><span class="highlight">Matrix =</span> <span class="spec-value">72 × 2 Half cells</span></p>
+                <p><span class="highlight">Auto Bussing:</span> Attaching Bars (I, U & L-Bars)</p>
+            </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide" id="slide5">
+            <h1>🏭 Manufacturing Process</h1>
+            <h2>Slide 5: Step 2 - Layup & ID</h2>
+            
+            <div class="content-box">
+                <h3>📋 Process Steps</h3>
+                <p><span class="step-number">7</span> <span class="highlight">Auto Taping:</span> Paste <span class="spec-value">44 tapes</span> to secure cells</p>
+                <p><span class="step-number">8</span> <span class="highlight">Barcode Area:</span> Module number & Company Name</p>
+                <p><span class="step-number">9</span> <span class="highlight">Buffer:</span> Storage</p>
+                <p><span class="step-number">10</span> <span class="highlight">Second EPE Loading</span></p>
+                <p><span class="step-number">11</span> <span class="highlight">Back Glass Loading</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide" id="slide6">
+            <h1>🏭 Manufacturing Process</h1>
+            <h2>Slide 6: Step 3 - Lamination & Trimming</h2>
+            
+            <div class="content-box">
+                <h3>🔄 Process Flow</h3>
+                <p><span class="step-number">12</span> Paste Barcode & Scan</p>
+                <p><span class="step-number">13</span> Pre-EL Testing (Electroluminescence)</p>
+                <p><span class="step-number">14</span> Glass Edge Soldering: For edge sealing</p>
+            </div>
+
+            <div class="content-box">
+                <h3>🔥 Laminator Process (Step 15)</h3>
+                <p><span class="highlight">Zone-1: Vacuum</span> - <span class="spec-value">125°C</span> to remove air</p>
+                <p><span class="highlight">Zone-2: Temperature</span> - <span class="spec-value">140°C</span> to melt EPE</p>
+                <p><span class="highlight">Zone-3: Cooling</span> - <span class="spec-value">30°C</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>✂️ Edge Trimming (Step 16)</h3>
+                <p><span class="step-number">16</span> Edge Trimming M/C: Trim extra EPE <span class="arrow-icon">→</span> Paste RFID</p>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide" id="slide7">
+            <h1>🔍 Quality Control & Framing</h1>
+            <h2>Slide 7: VQC & Framing</h2>
+            
+            <div class="content-box">
+                <h3>👁️ VQC (Visual Quality Checking)</h3>
+                <p><span class="highlight">Viewing Distance:</span> <span class="spec-value">1.5 Meter</span></p>
+                <p><span class="highlight">Viewing Angle:</span> <span class="spec-value">45° to 90°</span></p>
+                <p><span class="highlight">Light Intensity:</span> <span class="spec-value">> 800 Lux</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>🔧 Framing Station</h3>
+                <p>Buffer <span class="arrow-icon">→</span> Sealant application <span class="arrow-icon">→</span> Frame fixing <span class="arrow-icon">→</span> JB fixing on terminals</p>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide" id="slide8">
+            <h1>⚙️ Finishing Process</h1>
+            <h2>Slide 8: Finishing Process & Specs</h2>
+            
+            <div class="content-box">
+                <h3>🔥 JB Soldering</h3>
+                <p><span class="highlight">Time:</span> <span class="spec-value">3 ± 1 sec</span></p>
+                <p><span class="highlight">Holding:</span> <span class="spec-value">7 ± 3 sec</span></p>
+                <p><span class="highlight">Temperature:</span> <span class="spec-value">320°C - 380°C</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>💧 JB Potting</h3>
+                <p><span class="highlight">Ratio:</span> <span class="spec-value">06 : 01</span> (Base : Catalyst) for fast curing glue</p>
+            </div>
+
+            <div class="content-box">
+                <h3>⏱️ Curing</h3>
+                <p><span class="spec-value">4 hours</span> at <span class="spec-value">25°C to 30°C</span> with <span class="spec-value">60% Humidity</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide" id="slide9">
+            <h1>✅ Final Steps</h1>
+            <h2>Slide 9: Final Processing</h2>
+            
+            <div class="content-box">
+                <h3>🔄 Final Process Flow</h3>
+                <p>Edge Buffing (safety) <span class="arrow-icon">→</span> JB Box Closing <span class="arrow-icon">→</span> Contact Block Fixing</p>
+            </div>
+
+            <div class="content-box">
+                <h3>🔄 Flipper</h3>
+                <p>Rotating <span class="spec-value">180°</span> for inspection</p>
+            </div>
+
+            <div class="content-box">
+                <h3>☀️ Sun Simulator</h3>
+                <p>Flash <span class="spec-value">1000 ± 30 W/m²</span> at Air Mass <span class="spec-value">1.5</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>📊 Grading</h3>
+                <p>Classification by wattage (e.g., I1, I2)</p>
+            </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="slide" id="slide10">
+            <h1>🧪 Testing Sequence</h1>
+            <h2>Slide 10: Testing Flow</h2>
+            
+            <div class="content-box">
+                <h3>⚡ Safety Tests (Hipot)</h3>
+                <p>DCW Test (Voltage) <span class="arrow-icon">→</span> IR Test (Insulation) <span class="arrow-icon">→</span> GC Test (Grounding)</p>
+            </div>
+
+            <div class="content-box">
+                <h3>✅ Post-Production</h3>
+                <p>Post-EL Testing <span class="arrow-icon">→</span> FQC (Final Quality Checking) <span class="arrow-icon">→</span> Corner Fixing <span class="arrow-icon">→</span> Packing</p>
+            </div>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide" id="slide11">
+            <h1>🔬 Hipot Test Details</h1>
+            <h2>Slide 11: DCW & IR Tests</h2>
+            
+            <div class="content-box">
+                <h3>⚡ DCW Test</h3>
+                <p><span class="highlight">Purpose:</span> Checks leakage</p>
+                <div class="formula">
+                    Formula: (System Voltage × 3) + 300V
+                </div>
+                <p><span class="highlight">Example:</span> <span class="spec-value">1500 × 3 + 300 = 4800V</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>🔋 IR Test</h3>
+                <p><span class="highlight">Purpose:</span> Checks insulation</p>
+                <p><span class="highlight">Voltage:</span> <span class="spec-value">1500V</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>❌ Fail Condition (Common)</h3>
+                <p>Busbar/Matrix shift or frame contact</p>
+            </div>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide" id="slide12">
+            <h1>🔬 Hipot Test Details</h1>
+            <h2>Slide 12: GND & Specifications</h2>
+            
+            <div class="content-box">
+                <h3>🔌 GND (Ground Continuity)</h3>
+                <div class="formula">
+                    Formula: JB Diode Current × 2.5
+                </div>
+                <p><span class="highlight">Example:</span> <span class="spec-value">30A × 2.5 = 75A</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>📊 Specifications Table</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test</th>
+                            <th>Input</th>
+                            <th>Limit (Spec)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DCW</td>
+                            <td>4800V</td>
+                            <td>&lt; 50μA (Leakage)</td>
+                        </tr>
+                        <tr>
+                            <td>IR</td>
+                            <td>1500V</td>
+                            <td>&gt; 16 MΩ (Resistance)</td>
+                        </tr>
+                        <tr>
+                            <td>GND</td>
+                            <td>75A</td>
+                            <td>&lt; 100 mΩ (Resistance)</td>
+                        </tr>
+                        <tr>
+                            <td>Wet Leakage</td>
+                            <td>1500V</td>
+                            <td>&gt; 16 MΩ (for 120 sec)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 13 -->
+        <div class="slide" id="slide13">
+            <h1>📏 Technical Standards</h1>
+            <h2>Slide 13: STC vs BSTC</h2>
+            
+            <div class="content-box">
+                <h3>☀️ STC (Standard Test Conditions)</h3>
+                <p><span class="highlight">Irradiance:</span> <span class="spec-value">1000 W/m²</span></p>
+                <p><span class="highlight">Cell Temperature:</span> <span class="spec-value">25°C</span></p>
+                <p><span class="highlight">Air Mass:</span> <span class="spec-value">1.5</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>🔄 BSTC (Bifacial Standard Test Conditions)</h3>
+                <p><span class="highlight">Front Irradiance:</span> <span class="spec-value">1000 W/m²</span></p>
+                <p><span class="highlight">Back Irradiance:</span> <span class="spec-value">135 W/m²</span></p>
+                <p><span class="highlight">Cell Temperature:</span> <span class="spec-value">25°C</span></p>
+                <p><span class="highlight">Air Mass:</span> <span class="spec-value">1.5</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 14 -->
+        <div class="slide" id="slide14">
+            <h1>📐 Key Formulas</h1>
+            <h2>Slide 14: Efficiency & Fill Factor</h2>
+            
+            <div class="content-box">
+                <h3>📊 Fill Factor (FF%)</h3>
+                <div class="formula">
+                    FF% = (P<sub>max</sub> / (V<sub>oc</sub> × I<sub>sc</sub>)) × 100
+                </div>
+                <p><span class="highlight">Pass Condition:</span> <span class="spec-value">&gt; 75%</span></p>
+            </div>
+
+            <div class="content-box">
+                <h3>⚡ Efficiency%</h3>
+                <div class="formula">
+                    Efficiency% = (P<sub>max</sub> / (Area × Irradiance)) × 100
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15 -->
+        <div class="slide" id="slide15">
+            <h1>📐 Additional Formulas</h1>
+            <h2>Slide 15: Power & Area Calculations</h2>
+            
+            <div class="content-box">
+                <h3>⚡ Power Calculation</h3>
+                <div class="formula">
+                    P<sub>max</sub> = I<sub>mp</sub> × V<sub>mp</sub>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>🔌 Amperage</h3>
+                <div class="formula">
+                    I<sub>mp</sub> = P<sub>max</sub> / V<sub>mp</sub>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>📏 Area Calculation</h3>
+                <div class="formula">
+                    Area = Length × Width
+                </div>
+                <p><span class="highlight">Example:</span> <span class="spec-value">2.278 × 1.134 = 2.58 m²</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="prevSlide()">◀ Previous</button>
+        <button onclick="nextSlide()">Next ▶</button>
     </div>
 
     <script>
-        let currentPage = 1;
-        const totalPages = 16;
-        const slideContainer = document.getElementById('slideContainer');
-        const progressBar = document.getElementById('progressBar');
-        const overviewOverlay = document.getElementById('overviewOverlay');
+        let currentSlide = 1;
+        const totalSlides = 15;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
-        function init() {
-            generateOverviewGrid();
-            updateProgress();
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
             
-            // FASTER Animation: 20ms delay instead of 50ms
-            document.querySelectorAll('li').forEach((li, index) => {
-                li.style.transitionDelay = `${index * 20}ms`; 
-            });
-        }
-
-        function showPage(pageNumber) {
-            document.querySelectorAll('.slide').forEach(page => {
-                page.classList.remove('active');
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+            
+            slides.forEach(slide => {
+                slide.classList.remove('active');
             });
             
-            const activeSlide = document.getElementById(`slide-${pageNumber}`);
-            activeSlide.classList.add('active');
-            activeSlide.scrollTop = 0;
+            slides[currentSlide - 1].classList.add('active');
+            slides[currentSlide - 1].scrollTop = 0;
             
-            document.getElementById('indicator').textContent = `${pageNumber} / ${totalPages}`;
-            document.getElementById('prevBtn').disabled = (pageNumber === 1);
-            document.getElementById('nextBtn').disabled = (pageNumber === totalPages);
+            document.getElementById('slideCounter').textContent = `${currentSlide} / ${totalSlides}`;
             
-            updateProgress();
-            updateOverviewHighlight();
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
         }
 
-        function nextPage() {
-            if (currentPage < totalPages) {
-                currentPage++;
-                showPage(currentPage);
-            }
+        function nextSlide() {
+            currentSlide++;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            showSlide(currentSlide);
         }
 
-        function prevPage() {
-            if (currentPage > 1) {
-                currentPage--;
-                showPage(currentPage);
-            }
+        function prevSlide() {
+            currentSlide--;
+            if (currentSlide < 1) currentSlide = totalSlides;
+            showSlide(currentSlide);
         }
 
-        function goToSlide(n) {
-            currentPage = n;
-            showPage(currentPage);
-            toggleOverview();
-        }
+        // Touch gesture support
+        const container = document.getElementById('slideContainer');
+        
+        container.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        }, false);
 
-        function updateProgress() {
-            const percent = ((currentPage - 1) / (totalPages - 1)) * 100;
-            progressBar.style.width = `${percent}%`;
-        }
+        container.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, false);
 
-        function toggleOverview() {
-            if (overviewOverlay.classList.contains('active')) {
-                overviewOverlay.classList.remove('active');
-            } else {
-                updateOverviewHighlight();
-                overviewOverlay.classList.add('active');
-            }
-        }
-
-        function generateOverviewGrid() {
-            let html = '';
-            for(let i=1; i<=totalPages; i++) {
-                html += `<div class="grid-item" id="grid-item-${i}" onclick="goToSlide(${i})">
-                            <i class="fas fa-file-alt fa-2x" style="margin-bottom:10px; color:var(--primary)"></i>
-                            <div><strong>Page ${i}</strong></div>
-                         </div>`;
-            }
-            overviewOverlay.innerHTML = html;
-        }
-
-        function updateOverviewHighlight() {
-            document.querySelectorAll('.grid-item').forEach(item => item.classList.remove('current'));
-            const currentItem = document.getElementById(`grid-item-${currentPage}`);
-            if(currentItem) currentItem.classList.add('current');
-        }
-
-        function toggleFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
                 }
             }
         }
 
-        // Keyboard & Swipe Support
+        // Keyboard navigation
         document.addEventListener('keydown', function(event) {
-            if (event.key === "ArrowRight" || event.key === "Space") nextPage();
-            else if (event.key === "ArrowLeft") prevPage();
-            else if (event.key === "Escape") if(overviewOverlay.classList.contains('active')) toggleOverview();
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                prevSlide();
+            }
         });
 
-        let touchStartX = 0;
-        let touchEndX = 0;
-        const presentationArea = document.getElementById('presentation');
-
-        presentationArea.addEventListener('touchstart', e => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        presentationArea.addEventListener('touchend', e => {
-            touchEndX = e.changedTouches[0].screenX;
-            if (touchEndX < touchStartX - 50) nextPage();
-            if (touchEndX > touchStartX + 50) prevPage();
-        });
-
-        init();
+        showSlide(currentSlide);
     </script>
 </body>
 </html>
